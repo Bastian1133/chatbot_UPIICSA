@@ -1,35 +1,20 @@
-"""from google import genai
+import numpy as np
+from gemini_chat import GeminiChat
+from documentos import Documentos
 
-cliente = genai.Client(api_key="AIzaSyARZsER14stTHweYD4ynlRPSRBeNEGeKFs")
+# Se inicializa la clase GeminiChat
+GeminiChat = GeminiChat()
+Documentos = Documentos()
 
-chat = cliente.chats.create(model="gemini-3.1-flash-lite-preview")
+df = Documentos.crear_dataframe()
 
 print("¿En qué puedo ayudarte?")
+
 while True:
     consulta = input("> ")
     print("")
     if consulta == "salir":
+        print("¡Hasta luego!")
         break
-    respuesta = chat.send_message_stream(consulta)
-    for stream in respuesta:
-        print(stream.text)
-
-print("¡Hasta luego!")
-
-"""
-
-import numpy as np
-import pandas as pd
-from gemini_chat import GeminiChat
-
-# Configuracion splitter
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-
-# Se inicializa la clase GeminiChat
-GeminiChat = GeminiChat()
-
-print("¿En qué puedo ayudarte?")
-consulta = input("> ")
-print("")
-
-print(GeminiChat.consultar_llm(consulta))
+    GeminiChat.consultar_llm(consulta)
+    print("")
