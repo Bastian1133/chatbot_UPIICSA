@@ -6,6 +6,8 @@ from langchain_core.output_parsers import StrOutputParser
 
 from langchain_core.messages import SystemMessage, HumanMessage
 
+from langchain_core.prompts import ChatPromptTemplate
+
 class GeminiChat:
     def __init__(self):
         GEMINI_API_KEY = "AIzaSyARZsER14stTHweYD4ynlRPSRBeNEGeKFs"
@@ -20,17 +22,34 @@ class GeminiChat:
         Eres un asistente virtual de UPIICSA especializado en servicio social.
         Responde en texto plano sin Markdown.
         Sé conciso y directo.
-        Si no sabes algo, dilo claramente en lugar de inventar.
+        Si no sabes algo con absoluta certeza, dilo claramente en lugar de inventar, es muy importante que la información que brindes sea real.
         """ 
 
-    def consultar_llm(self, consulta):
-        mensajes = [
-            SystemMessage(content=self.system_prompt),
-            HumanMessage(content=consulta)
-        ]
-        chain = self.llm | StrOutputParser()
+    def consultar_llm(self, consulta, mejor_pasaje):
         
-        for chunk in chain.stream(mensajes):
-            print(chunk, end="", flush=True)
+        # mensajes = [
+        #     SystemMessage(content=self.system_prompt + ""),
+        #     HumanMessage(content=consulta)
+        # ]
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", self.system_prompt),
+            ("human", """
+            
+            PREGUNTA: '{consulta}'
+            TEXTO DE REFERENCIA: '{pasaje_relevante}'
+
+            RESPUESTA:
+            """
+            ),
+        ])
+        chain = prompt | self.llm | StrOutputParser()
+        
+        # for chunk in chain.stream(mensajes):
+        #     print(chunk, end="", flush=True)
+        resultado = chain.invoke({
+            "consulta": consulta,
+            "pasaje_relevante": mejor_pasaje,
+        })
+        print(resultado)
         print("")  # salto de línea al terminar
 
