@@ -9,6 +9,7 @@ Documentos = Documentos()
 
 df = Documentos.crear_dataframe()
 calcular_embeddings(df)
+print(df.head()) # Imprime las primeras filas del DataFrame para verificar que se han creado correctamente los embeddings
 
 print("¿En qué puedo ayudarte?")
 

@@ -6,11 +6,9 @@ embeddings_model = GoogleGenerativeAIEmbeddings(
   google_api_key="AIzaSyARZsER14stTHweYD4ynlRPSRBeNEGeKFs"
 )
 
-def embeddings_fn(text):
-  """
-  Crea los embeddings dado un texto
-  """
-  return embeddings_model.embed_query(text)
+def embeddings_fn(texto):
+  # Crea los embeddings dado un texto
+  return embeddings_model.embed_query(texto)
 
 def calcular_embeddings(df):
   # Calculamos los embeddings para cada texto de nuestro DataFrame

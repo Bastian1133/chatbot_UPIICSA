@@ -1,29 +1,38 @@
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter # Configuracion splitter
 import pandas as pd
+import textwrap
 
 class Documentos:
     def __init__(self):
-        info_1 = """¿Qué requiero para iniciar mi servicio social? 
 
-        - Ser alumno inscrito o egresado
-        - Constancia de créditos vigente que avale un mínimo del 70% de avance. En caso de ser egresado, deberás contar con constancia del 100% de créditos cursados, carta de pasante o boleta certificada (vigencia no mayor a 3 meses)
-        - Constancia de servicio médico vigente (IMSS, ISSSTE o privado) con el que cuentes. Egresados con el 100% de créditos cursados, no es necesaria esta constancia.
-        - CURP, no mayor a un mes de expedición.
-        - Contar con correo electrónico vigente (personal o institucional).
+        info_1 = textwrap.dedent("""
+            ¿Qué requiero para iniciar mi servicio social?
+            - Ser alumno inscrito o egresado.
+            - Constancia de créditos vigente que avale un mínimo del 70% de avance.
+            - Constancia de servicio médico vigente (IMSS, ISSSTE o privado).
+            - CURP, no mayor a un mes de expedición.
+            - Contar con correo electrónico vigente (personal o institucional).
+            IMPORTANTE: únicamente podrás realizarlo dentro del IPN.
+        """).strip()
 
-        IMPORTANTE: únicamente podrás realizarlo dentro del IPN, así como en dependencias y empresas que se encuentren registradas en el SISS (Sistema Institucional de Servicio Social).
-        """
-
-        doc_1 =  Document(info_1)
-        self.docs =  [doc_1]
+        doc_1 = Document(textwrap.dedent(info_1).strip(), metadata={"titulo": "Requisitos servicio social"})
+        self.docs = [doc_1]
 
 
     def crear_dataframe(self):
         # Dividiendo los documentos en fragmentos más pequeños (chunks) para que el modelo pueda procesarlos mejor
         text_splitter = RecursiveCharacterTextSplitter(
-                  chunk_size=450,
-                  chunk_overlap=50
+                  chunk_size=80,
+                  chunk_overlap=50, # Esto significa que cada fragmento tendrá un solapamiento de 100 caracteres con el siguiente fragmento para mantener el contexto.
+                  separators=[
+                    "\n\n",   # párrafos primero
+                    "\n",     # luego líneas
+                    ". ",     # luego oraciones
+                    ", ",
+                    " ",
+                    ""
+                ] 
         )
 
         splits = text_splitter.split_documents(self.docs)
