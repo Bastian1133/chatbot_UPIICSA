@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import os
 # Configuracion LLM - Gemini
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -10,8 +11,10 @@ from langchain_core.prompts import ChatPromptTemplate
 
 class GeminiChat:
     def __init__(self):
-        GEMINI_API_KEY = "AIzaSyARZsER14stTHweYD4ynlRPSRBeNEGeKFs"
-        os.environ["GEMINI_API_KEY"] = GEMINI_API_KEY
+        load_dotenv("keys.env") # Carga las variables de entorno desde el archivo keys.env
+
+        GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") # Obtiene la clave de API de Gemini desde las variables de entorno
+        # os.environ["GEMINI_API_KEY"] = GEMINI_API_KEY
 
         self.llm = ChatGoogleGenerativeAI(
             model="gemini-3.1-flash-lite-preview",
