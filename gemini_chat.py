@@ -14,7 +14,9 @@ class GeminiChat:
         load_dotenv("keys.env") # Carga las variables de entorno desde el archivo keys.env
 
         GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") # Obtiene la clave de API de Gemini desde las variables de entorno
-        # os.environ["GEMINI_API_KEY"] = GEMINI_API_KEY
+        
+        if not GEMINI_API_KEY:
+            raise ValueError("Falta la API key de Gemini en el archivo keys.env")
 
         self.llm = ChatGoogleGenerativeAI(
             model="gemini-3.1-flash-lite-preview",

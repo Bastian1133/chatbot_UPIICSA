@@ -1,9 +1,17 @@
+from dotenv import load_dotenv
+import os
+from pathlib import Path
 import numpy as np
 # Usamos el modelo de embeddings de Google Generative AI para generar los vectores de los documentos y las preguntas.
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+
+
+load_dotenv("keys.env") # Carga las variables de entorno desde el archivo keys.env
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") # Obtiene la clave de API de Gemini desde las variables de entorno 
+
 embeddings_model = GoogleGenerativeAIEmbeddings(
   model="gemini-embedding-2",
-  google_api_key="AIzaSyARZsER14stTHweYD4ynlRPSRBeNEGeKFs"
+  google_api_key=GEMINI_API_KEY
 )
 
 def embeddings_fn(texto):
