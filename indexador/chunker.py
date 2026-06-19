@@ -1,4 +1,5 @@
 import textwrap
+import re
 
 class Chunker:
     
@@ -8,25 +9,22 @@ class Chunker:
     def _dividir_texto(self, texto: str) -> list:
         fragmentos = []
         
-        # Primero separar por párrafos (doble salto de línea)
+        # Separar por párrafos (doble salto de línea)
         bloques = texto.split("\n\n")
         
         for bloque in bloques:
-            # Dentro de cada párrafo, separar por línea
+            # Separar por líneas primero (respeta estructura de lista)
             lineas = bloque.split("\n")
             for linea in lineas:
                 linea = linea.strip()
                 if not linea:
                     continue
-                # Solo si una línea supera el límite, partir por oración
-                if len(linea) > self.chunk_size_maximo:
-                    partes = linea.split(". ")
-                    for parte in partes:
-                        parte = parte.strip()
-                        if parte:
-                            fragmentos.append(parte)
-                else:
-                    fragmentos.append(linea)
+                # Siempre dividir por oraciones (. ? !)
+                oraciones = re.split(r'(?<=[.?!])\s+', linea)
+                for oracion in oraciones:
+                    oracion = oracion.strip()
+                    if oracion:
+                        fragmentos.append(oracion)
         
         return fragmentos
     

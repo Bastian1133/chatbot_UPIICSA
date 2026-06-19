@@ -2,11 +2,8 @@ from dotenv import load_dotenv
 import os
 # Configuracion LLM - Gemini
 from langchain_google_genai import ChatGoogleGenerativeAI
-
 from langchain_core.output_parsers import StrOutputParser
-
 from langchain_core.messages import SystemMessage, HumanMessage
-
 from langchain_core.prompts import ChatPromptTemplate
 
 class GeminiChat:
@@ -28,14 +25,10 @@ class GeminiChat:
         Responde en texto plano sin Markdown.
         Sé conciso y directo.
         Si no sabes algo con absoluta certeza, dilo claramente en lugar de inventar, es muy importante que la información que brindes sea real.
+        No incluyas información que no esté en el texto de referencia, que viene dado en cada consulta siguiendo TEXTO DE REFERENCIA: 'contexto'
         """ 
 
     def consultar_llm(self, consulta, mejor_pasaje):
-        
-        # mensajes = [
-        #     SystemMessage(content=self.system_prompt + ""),
-        #     HumanMessage(content=consulta)
-        # ]
         prompt = ChatPromptTemplate.from_messages([
             ("system", self.system_prompt),
             ("human", """

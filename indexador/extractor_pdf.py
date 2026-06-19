@@ -40,6 +40,9 @@ class Extractor:
         # Eliminar saltos de línea falsos: si la siguiente línea empieza
         # con minúscula o es continuación de oración, unir con espacio
         texto = re.sub(r'\n(?![•\n\-\d]|[A-ZÁÉÍÓÚÑ])', ' ', texto)
+        # Unir líneas donde la anterior no termina en puntuación final
+        # aunque la siguiente empiece con mayúscula (saltos visuales del PDF)
+        texto = re.sub(r'(?<![.?!:])\n(?=[A-ZÁÉÍÓÚÑ])', ' ', texto)
         # Normalizar saltos de línea múltiples (más de 2) a doble salto
         texto = re.sub(r'\n{3,}', '\n\n', texto)
         # Convertir espacios múltiples en uno solo
