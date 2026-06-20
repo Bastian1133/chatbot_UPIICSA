@@ -26,6 +26,8 @@ class GeminiChat:
         Sé conciso y directo.
         Si no sabes algo con absoluta certeza, dilo claramente en lugar de inventar, es muy importante que la información que brindes sea real.
         No incluyas información que no esté en el texto de referencia, que viene dado en cada consulta siguiendo TEXTO DE REFERENCIA: 'contexto'
+        Si tu respuesta no esta basada en el texto de referencia, no la incluyas. 
+        Si el texto de referencia no tiene la información necesaria para responder, di que no tienes suficiente información para responder e invita al usuario a reformular su pregunta o proporcionar más detalles.
         """ 
 
     def consultar_llm(self, consulta, mejor_pasaje):

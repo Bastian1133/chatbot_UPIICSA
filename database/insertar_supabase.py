@@ -1,4 +1,3 @@
-from pathlib import Path
 from database.supabase_client import get_supabase_client
 from datetime import date
 

@@ -1,24 +1,22 @@
 from gemini_chat import GeminiChat
 from documentos import Documentos
-from embedding import calcular_embeddings
-from embedding import encontrar_mejor_pasaje
+from database.retriever import Retriever
 
 # Se inicializa la clase GeminiChat
 GeminiChat = GeminiChat()
-Documentos = Documentos()
-
-df = Documentos.crear_dataframe()
-calcular_embeddings(df)
-print(df.head()) # Imprime las primeras filas del DataFrame para verificar que se han creado correctamente los embeddings
+Retriever = Retriever()
 
 print("¿En qué puedo ayudarte?")
 
 while True:
     consulta = input("> ")
     print("")
-    mejor_pasaje = encontrar_mejor_pasaje(consulta, df)
+    
     if consulta == "salir":
         print("¡Hasta luego!")
         break
-    GeminiChat.consultar_llm(consulta, mejor_pasaje)
-    print("")
+    mejor_pasaje = Retriever.obtener_contexto_concatenado(consulta)
+    print("Contexto relevante encontrado:")
+    # print(mejor_pasaje)
+    # GeminiChat.consultar_llm(consulta, mejor_pasaje)
+    # print("")
