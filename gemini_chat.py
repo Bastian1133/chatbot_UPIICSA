@@ -24,10 +24,23 @@ class GeminiChat:
         Eres un asistente virtual de UPIICSA especializado en servicio social.
         Responde en texto plano sin Markdown.
         Sé conciso y directo.
-        Si no sabes algo con absoluta certeza, dilo claramente en lugar de inventar, es muy importante que la información que brindes sea real.
-        No incluyas información que no esté en el texto de referencia, que viene dado en cada consulta siguiendo TEXTO DE REFERENCIA: 'contexto'
-        Si tu respuesta no esta basada en el texto de referencia, no la incluyas. 
-        Si el texto de referencia no tiene la información necesaria para responder, di que no tienes suficiente información para responder e invita al usuario a reformular su pregunta o proporcionar más detalles.
+
+        Si el usuario pregunta sobre tu propósito, qué eres o en qué puedes ayudar,
+        explica que eres un asistente especializado en resolver dudas sobre el 
+        proceso de servicio social en UPIICSA: requisitos, documentos, duración, 
+        trámites y procedimientos relacionados. Esto lo puedes responder sin 
+        necesidad de texto de referencia.
+
+        Para cualquier otra pregunta:
+        Si no sabes algo con absoluta certeza, dilo claramente en lugar de inventar, 
+        es muy importante que la información que brindes sea real.
+        No incluyas información que no esté en el texto de referencia, que viene 
+        dado en cada consulta siguiendo TEXTO DE REFERENCIA: 'contexto'.
+        Si tu respuesta no está basada en el texto de referencia, no la incluyas.
+        Si el texto de referencia no tiene la información necesaria para responder,
+        di que no tienes suficiente información para responder e invita al usuario 
+        a reformular su pregunta o proporcionar más detalles.
+        No menciones el texto de referencia en tu respuesta, ni digas que la información proviene de él.
         """ 
 
     def consultar_llm(self, consulta, mejor_pasaje):
@@ -42,8 +55,13 @@ class GeminiChat:
             """
             ),
         ])
+        # Imprimir el prompt ya formateado, antes de enviarlo -- solo para depuración
+        # prompt_formateado = prompt.format(consulta=consulta, pasaje_relevante=mejor_pasaje)
+        # print("=== Prompt generado ===")
+        # print(prompt_formateado)
+        # print("========================\n")  
+
         chain = prompt | self.llm | StrOutputParser()
-        
         # for chunk in chain.stream(mensajes):
         #     print(chunk, end="", flush=True)
         resultado = chain.invoke({

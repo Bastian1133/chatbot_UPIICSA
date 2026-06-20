@@ -28,8 +28,8 @@ class Retriever:
         if not resultados:
             return ""
         
-        for r in resultados:
-            print(f"  Similitud: {r['similitud']:.3f} — Hijo: {r['texto_embedding']}")
+        # for r in resultados:
+        #     print(f"  Similitud: {r['similitud']:.3f} — Hijo: {r['texto_embedding']}")
         
         contextos = [r["contexto_completo"] for r in resultados]
         return "\n\n---\n\n".join(contextos)

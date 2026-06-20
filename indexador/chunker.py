@@ -8,19 +8,23 @@ class Chunker:
     
     def _dividir_texto(self, texto: str) -> list:
         fragmentos = []
-        
+    
         # Separar por párrafos (doble salto de línea)
         bloques = texto.split("\n\n")
         
         for bloque in bloques:
-            # Separar por líneas primero (respeta estructura de lista)
-            lineas = bloque.split("\n")
+            lineas = [l.strip() for l in bloque.split("\n") if l.strip()]
+            if not lineas:
+                continue
+            
+            # Fusionar la primera línea (encabezado/título) con la segunda,
+            # para que no quede como chunk aislado y genérico
+            if len(lineas) > 1:
+                lineas[1] = f"{lineas[0]} {lineas[1]}"
+                lineas = lineas[1:]
+            
             for linea in lineas:
-                linea = linea.strip()
-                if not linea:
-                    continue
-                # Siempre dividir por oraciones (. ? !)
-                oraciones = re.split(r'(?<=[.?!])\s+', linea)
+                oraciones = re.split(r'(?<=[.!])\s+', linea)
                 for oracion in oraciones:
                     oracion = oracion.strip()
                     if oracion:
@@ -28,7 +32,7 @@ class Chunker:
         
         return fragmentos
     
-    def generar_chunks(self, texto: str, titulo: str, fuente: str) -> dict:
+    def generar_chunks(self, texto: str, fuente: str) -> dict:
         texto_limpio = textwrap.dedent(texto).strip()
         
         # Chunk padre: el bloque completo
@@ -42,7 +46,7 @@ class Chunker:
         hijos = []
         for fragmento in fragmentos:
             hijos.append({
-                "texto_embedding": f"{titulo}: {fragmento}"
+                "texto_embedding": fragmento,
             })
         
         return {
@@ -53,9 +57,8 @@ class Chunker:
     def generar_desde_diccionario(self, diccionario: dict) -> list:
         resultado = []
         for nombre_pdf, texto in diccionario.items():
-            titulo = nombre_pdf.replace(".pdf", "").replace("_", " ").title()
-            print(f"Chunkeando: {nombre_pdf} — título: '{titulo}'")
-            chunks = self.generar_chunks(texto, titulo, nombre_pdf)
+            print(f"Chunkeando: {nombre_pdf}")
+            chunks = self.generar_chunks(texto, nombre_pdf)
             resultado.append(chunks)
             print(f"  Padre: 1 bloque")
             print(f"  Hijos: {len(chunks['hijos'])} fragmentos")

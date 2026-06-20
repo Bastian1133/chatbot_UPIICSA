@@ -16,7 +16,5 @@ while True:
         print("¡Hasta luego!")
         break
     mejor_pasaje = Retriever.obtener_contexto_concatenado(consulta)
-    print("Contexto relevante encontrado:")
-    # print(mejor_pasaje)
-    # GeminiChat.consultar_llm(consulta, mejor_pasaje)
-    # print("")
+    GeminiChat.consultar_llm(consulta, mejor_pasaje)
+    print("")

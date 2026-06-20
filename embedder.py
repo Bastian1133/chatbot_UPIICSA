@@ -18,14 +18,18 @@ class Embedder:
         )
     
     def vectorizar_consulta(self, texto: str) -> list:
-        return self.modelo.embed_query(texto)
+        # Formato de tarea para búsquedas (asimétrico)
+        texto_formateado = f"task: search result | query: {texto}"
+        return self.modelo.embed_query(texto_formateado)
     
     def vectorizar_lote(self, textos: list, batch_size: int = 20) -> list:
         embeddings = []
         total = len(textos)
         for i in range(0, total, batch_size):
             lote = textos[i:i + batch_size]
-            resultados = [self.modelo.embed_query(texto) for texto in lote]
+            # Formato de tarea para documentos (asimétrico)
+            lote_formateado = [f"title: none | text: {t}" for t in lote]
+            resultados = [self.modelo.embed_query(t) for t in lote_formateado]
             embeddings.extend(resultados)
             print(f"  Vectorizados {min(i + batch_size, total)}/{total}...")
         return embeddings
