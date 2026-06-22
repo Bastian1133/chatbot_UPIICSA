@@ -6,3 +6,5 @@ pandas
 supabase
 python-dotenv
 pypdf
+fastapi
+uvicorn

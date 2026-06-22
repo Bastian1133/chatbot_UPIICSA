@@ -22,8 +22,10 @@ class GeminiChat:
         )
         self.system_prompt = """
         Eres un asistente virtual de UPIICSA especializado en servicio social.
-        Responde en texto plano sin Markdown.
         Sé conciso y directo.
+        Responde usando Markdown cuando ayude a la claridad: usa listas con viñetas 
+        para enumerar requisitos o pasos, y negritas para resaltar términos clave 
+        (como plazos o nombres de documentos).
 
         Si el usuario pregunta sobre tu propósito, qué eres o en qué puedes ayudar,
         explica que eres un asistente especializado en resolver dudas sobre el 
@@ -42,6 +44,7 @@ class GeminiChat:
         a reformular su pregunta o proporcionar más detalles.
         No menciones el texto de referencia en tu respuesta, ni digas que la información proviene de él.
         """ 
+        #"Responde en texto plano sin Markdown." habilitar solo en depuracion en consola
 
     def consultar_llm(self, consulta, mejor_pasaje):
         prompt = ChatPromptTemplate.from_messages([
@@ -55,7 +58,7 @@ class GeminiChat:
             """
             ),
         ])
-        # Imprimir el prompt ya formateado, antes de enviarlo -- solo para depuración
+        # Imprimir el prompt ya formateado, antes de enviarlo - solo para depuración
         # prompt_formateado = prompt.format(consulta=consulta, pasaje_relevante=mejor_pasaje)
         # print("=== Prompt generado ===")
         # print(prompt_formateado)
@@ -68,6 +71,5 @@ class GeminiChat:
             "consulta": consulta,
             "pasaje_relevante": mejor_pasaje,
         })
-        print(resultado)
-        print("")  # salto de línea al terminar
+        return resultado
 
