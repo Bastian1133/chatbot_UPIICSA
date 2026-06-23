@@ -1,8 +1,10 @@
 import os
+import time
+from pathlib import Path
 from dotenv import load_dotenv
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-load_dotenv("keys.env") # Carga las variables de entorno desde el archivo keys.env
+load_dotenv(Path(__file__).parent / "keys.env") # Carga las variables de entorno desde el archivo keys.env
 
 class Embedder:
     
@@ -32,4 +34,10 @@ class Embedder:
             resultados = [self.modelo.embed_query(t) for t in lote_formateado]
             embeddings.extend(resultados)
             print(f"  Vectorizados {min(i + batch_size, total)}/{total}...")
+            
+            # Respetar el límite de 100 requests/minuto del tier gratuito
+            if i + batch_size < total:
+                print(f"  Esperando 15s para respetar límite de la API...")
+                time.sleep(15)
+        
         return embeddings

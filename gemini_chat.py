@@ -42,7 +42,7 @@ class GeminiChat:
         Si el texto de referencia no tiene la información necesaria para responder,
         di que no tienes suficiente información para responder e invita al usuario 
         a reformular su pregunta o proporcionar más detalles.
-        No menciones el texto de referencia en tu respuesta, ni digas que la información proviene de él.
+        No menciones el texto de referencia en ninguna de tus respuestas, ni digas que la información proviene de él.
         """ 
         #"Responde en texto plano sin Markdown." habilitar solo en depuracion en consola
 
